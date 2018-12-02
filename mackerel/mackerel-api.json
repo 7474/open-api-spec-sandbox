@@ -1,201 +1,201 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "This is part of Makerel API.",
-    "version": "0.1.0",
-    "title": "Makerel API",
-    "termsOfService": "https://mackerel.io/ja/api-docs/",
-    "contact": {
-      "url": "https://mackerel.io/"
+    "swagger": "2.0",
+    "info": {
+      "description": "This is part of Makerel API.",
+      "version": "0.1.0",
+      "title": "Makerel API",
+      "termsOfService": "https://mackerel.io/ja/api-docs/",
+      "contact": {
+        "url": "https://mackerel.io/"
+      },
+      "license": {
+        "name": "-"
+      }
     },
-    "license": {
-      "name": "-"
-    }
-  },
-  "host": "api.mackerelio.com",
-  "basePath": "/api/v0",
-  "tags": [
-    {
-      "name": "alert"
+    "host": "api.mackerelio.com",
+    "basePath": "/api/v0",
+    "schemes": [
+      "https"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "securityDefinitions": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-Api-Key",
+        "in": "header"
+      }
     },
-    {
-      "name": "serviceMetric"
-    }
-  ],
-  "schemes": [
-    "https"
-  ],
-  "securityDefinitions": {
-    "apiKey": {
-      "type": "apiKey",
-      "name": "X-Api-Key",
-      "in": "header"
-    }
-  },
-  "paths": {
-    "/services/{serviceName}/tsdb": {
-      "post": {
-        "tags": [
-          "serviceMetric"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "serviceName",
-            "in": "path",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "serviceMetrics",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/MetricValue"
+    "tags": [
+      {
+        "name": "alert"
+      },
+      {
+        "name": "serviceMetric"
+      }
+    ],
+    "paths": {
+      "/services/{serviceName}/tsdb": {
+        "post": {
+          "tags": [
+            "serviceMetric"
+          ],
+          "operationId": "postServiceMetric",
+          "parameters": [
+            {
+              "name": "serviceName",
+              "in": "path",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "serviceMetrics",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/MetricValue"
+                }
               }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "成功",
-            "schema": {
-              "$ref": "#/definitions/ApiResponse"
+          ],
+          "responses": {
+            "200": {
+              "description": "成功",
+              "schema": {
+                "$ref": "#/definitions/ApiResponse"
+              }
             }
-          }
-        },
-        "security": [
-          {
-            "apiKey": []
-          }
-        ]
+          },
+          "security": [
+            {
+              "apiKey": []
+            }
+          ]
+        }
+      },
+      "/alerts": {
+        "get": {
+          "tags": [
+            "alert"
+          ],
+          "operationId": "getAlerts",
+          "parameters": [
+            {
+              "name": "withClosed",
+              "in": "query",
+              "type": "boolean"
+            },
+            {
+              "name": "nextId",
+              "in": "query",
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "並び順は、アラートの発生時刻が新しい順です。 一覧は最大100件まで取得されます。nextId はアラートが101件以上あるときに取得されます。",
+              "schema": {
+                "$ref": "#/definitions/AlertsResponse"
+              }
+            }
+          },
+          "security": [
+            {
+              "apiKey": []
+            }
+          ]
+        }
       }
     },
-    "/alerts": {
-      "get": {
-        "tags": [
-          "alert"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "withClosed",
-            "in": "query",
+    "definitions": {
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
             "type": "boolean"
+          }
+        }
+      },
+      "AlertsResponse": {
+        "type": "object",
+        "properties": {
+          "alerts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Alert"
+            }
           },
-          {
-            "name": "nextId",
-            "in": "query",
+          "nextId": {
             "type": "string"
           }
+        }
+      },
+      "MetricValue": {
+        "type": "object",
+        "required": [
+          "name",
+          "time",
+          "value"
         ],
-        "responses": {
-          "200": {
-            "description": "並び順は、アラートの発生時刻が新しい順です。 一覧は最大100件まで取得されます。nextId はアラートが101件以上あるときに取得されます。",
-            "schema": {
-              "$ref": "#/definitions/AlertsResponse"
-            }
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "time": {
+            "type": "number"
+          },
+          "value": {
+            "type": "number"
           }
-        },
-        "security": [
-          {
-            "apiKey": []
+        }
+      },
+      "Alert": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "monitorId",
+          "type",
+          "openedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "monitorId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "hostId": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "openedAt": {
+            "type": "integer"
+          },
+          "closedAt": {
+            "type": "integer"
           }
-        ]
-      }
-    }
-  },
-  "definitions": {
-    "ApiResponse": {
-      "properties": {
-        "success": {
-          "type": "boolean"
-        }
-      }
-    },
-    "AlertsResponse": {
-      "properties": {
-        "alerts": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Alert"
-          }
-        },
-        "nextId": {
-          "type": "string"
-        }
-      }
-    },
-    "MetricValue": {
-      "required": [
-        "name",
-        "time",
-        "value"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "time": {
-          "type": "number"
-        },
-        "value": {
-          "type": "number"
-        }
-      }
-    },
-    "Alert": {
-      "required": [
-        "id",
-        "status",
-        "monitorId",
-        "type",
-        "openedAt"
-      ],
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "monitorId": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "hostId": {
-          "type": "string"
-        },
-        "value": {
-          "type": "number"
-        },
-        "message": {
-          "type": "string"
-        },
-        "reason": {
-          "type": "string"
-        },
-        "openedAt": {
-          "type": "integer"
-        },
-        "closedAt": {
-          "type": "integer"
         }
       }
     }
   }
-}
