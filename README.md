@@ -6,4 +6,4 @@ Currently refer to Swagger.
 
 ## Mackerel API
 
-- [mackerel.json](./mackerel/mackerel.json)
+- [mackerel-api.json](./mackerel/mackerel-api.json)
