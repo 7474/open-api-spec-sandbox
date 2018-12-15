@@ -30,15 +30,52 @@
         "in": "header"
       }
     },
+    "security": [
+      {
+        "apiKey": []
+      }
+    ],
     "tags": [
       {
         "name": "alert"
+      },
+      {
+        "name": "hostMetric"
       },
       {
         "name": "serviceMetric"
       }
     ],
     "paths": {
+      "/tsdb": {
+        "post": {
+          "tags": [
+            "hostMetric"
+          ],
+          "operationId": "postHostMetric",
+          "parameters": [
+            {
+              "name": "hostMetrics",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/HostMetricValue"
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "成功",
+              "schema": {
+                "$ref": "#/definitions/ApiResponse"
+              }
+            }
+          }
+        }
+      },
       "/services/{serviceName}/tsdb": {
         "post": {
           "tags": [
@@ -59,7 +96,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/MetricValue"
+                  "$ref": "#/definitions/ServiceMetricValue"
                 }
               }
             }
@@ -71,12 +108,7 @@
                 "$ref": "#/definitions/ApiResponse"
               }
             }
-          },
-          "security": [
-            {
-              "apiKey": []
-            }
-          ]
+          }
         }
       },
       "/alerts": {
@@ -104,12 +136,7 @@
                 "$ref": "#/definitions/AlertsResponse"
               }
             }
-          },
-          "security": [
-            {
-              "apiKey": []
-            }
-          ]
+          }
         }
       }
     },
@@ -136,7 +163,30 @@
           }
         }
       },
-      "MetricValue": {
+      "HostMetricValue": {
+        "type": "object",
+        "required": [
+          "hostId",
+          "name",
+          "time",
+          "value"
+        ],
+        "properties": {
+          "hostId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "time": {
+            "type": "number"
+          },
+          "value": {
+            "type": "number"
+          }
+        }
+      },
+      "ServiceMetricValue": {
         "type": "object",
         "required": [
           "name",

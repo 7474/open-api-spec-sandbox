@@ -21,10 +21,31 @@ securityDefinitions:
     type: apiKey
     name: 'X-Api-Key'
     in: header
+security:
+  - apiKey: []
 tags:
   - name: alert
+  - name: hostMetric
   - name: serviceMetric
 paths:
+  '/tsdb':
+    post:
+      tags:
+        - hostMetric
+      operationId: postHostMetric
+      parameters:
+        - name: hostMetrics
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/HostMetricValue'
+      responses:
+        '200':
+          description: '成功'
+          schema:
+            $ref: '#/definitions/ApiResponse'
   '/services/{serviceName}/tsdb':
     post:
       tags:
@@ -41,14 +62,12 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/MetricValue'
+              $ref: '#/definitions/ServiceMetricValue'
       responses:
         '200':
           description: '成功'
           schema:
             $ref: '#/definitions/ApiResponse'
-      security:
-        - apiKey: []
   '/alerts':
     get:
       tags:
@@ -66,8 +85,6 @@ paths:
           description: 並び順は、アラートの発生時刻が新しい順です。 一覧は最大100件まで取得されます。nextId はアラートが101件以上あるときに取得されます。
           schema:
             $ref: '#/definitions/AlertsResponse'
-      security:
-        - apiKey: []
 definitions:
   ApiResponse:
     type: object
@@ -83,7 +100,23 @@ definitions:
           $ref: '#/definitions/Alert'
       nextId:
         type: string
-  MetricValue:
+  HostMetricValue:
+    type: object
+    required:
+      - hostId
+      - name
+      - time
+      - value
+    properties:
+      hostId:
+        type: string
+      name:
+        type: string
+      time:
+        type: number
+      value:
+        type: number
+  ServiceMetricValue:
     type: object
     required:
       - name
