@@ -1,0 +1,23 @@
+{
+  "name": "open-api-spec",
+  "version": "1.0.0",
+  "description": "This repository is my sandbox of [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification).",
+  "main": "index.js",
+  "dependencies": {
+    "node-red-nodegen": "^0.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7474/open-api-spec-sandbox.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/7474/open-api-spec-sandbox/issues"
+  },
+  "homepage": "https://github.com/7474/open-api-spec-sandbox#readme"
+}
