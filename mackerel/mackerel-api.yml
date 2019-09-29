@@ -89,12 +89,12 @@ paths:
           name: hostStatus
           required: true
           schema:
-            $ref: "#/definitions/ApiResponse"
+            $ref: "#/definitions/HostStatusRequest"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/HostResponse"
+            $ref: "#/definitions/ApiResponse"
   "/tsdb":
     post:
       tags:

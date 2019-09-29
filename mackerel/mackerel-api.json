@@ -148,7 +148,7 @@
             "200": {
               "description": "成功",
               "schema": {
-                "$ref": "#/definitions/HostResponse"
+                "$ref": "#/definitions/ApiResponse"
               }
             }
           }
