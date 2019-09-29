@@ -1,11 +1,11 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
   description: This is part of Makerel API.
   version: 0.1.0
   title: Makerel API
-  termsOfService: 'https://mackerel.io/ja/api-docs/'
+  termsOfService: "https://mackerel.io/ja/api-docs/"
   contact:
-    url: 'https://mackerel.io/'
+    url: "https://mackerel.io/"
   license:
     name: "-"
 host: api.mackerelio.com
@@ -19,7 +19,7 @@ produces:
 securityDefinitions:
   apiKey:
     type: apiKey
-    name: 'X-Api-Key'
+    name: "X-Api-Key"
     in: header
 security:
   - apiKey: []
@@ -29,17 +29,17 @@ tags:
   - name: hostMetric
   - name: serviceMetric
 paths:
-  '/hosts':
+  "/hosts":
     get:
       tags:
         - host
       operationId: getHosts
       responses:
-        '200':
-          description: '成功'
+        "200":
+          description: "成功"
           schema:
-            $ref: '#/definitions/HostsResponse'
-  '/hosts/{hostId}':
+            $ref: "#/definitions/HostsResponse"
+  "/hosts/{hostId}":
     get:
       tags:
         - host
@@ -50,11 +50,11 @@ paths:
           required: true
           type: string
       responses:
-        '200':
-          description: '成功'
+        "200":
+          description: "成功"
           schema:
-            $ref: '#/definitions/HostResponse'
-  '/hosts/{hostId}/status':
+            $ref: "#/definitions/HostResponse"
+  "/hosts/{hostId}/status":
     post:
       tags:
         - host
@@ -68,13 +68,13 @@ paths:
           name: hostStatus
           required: true
           schema:
-            $ref: '#/definitions/HostStatusRequest'
+            $ref: "#/definitions/HostStatusRequest"
       responses:
-        '200':
-          description: '成功'
+        "200":
+          description: "成功"
           schema:
-            $ref: '#/definitions/HostResponse'
-  '/tsdb':
+            $ref: "#/definitions/HostResponse"
+  "/tsdb":
     post:
       tags:
         - hostMetric
@@ -86,13 +86,13 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/HostMetricValue'
+              $ref: "#/definitions/HostMetricValue"
       responses:
-        '200':
-          description: '成功'
+        "200":
+          description: "成功"
           schema:
-            $ref: '#/definitions/ApiResponse'
-  '/services/{serviceName}/tsdb':
+            $ref: "#/definitions/ApiResponse"
+  "/services/{serviceName}/tsdb":
     post:
       tags:
         - serviceMetric
@@ -108,13 +108,13 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/ServiceMetricValue'
+              $ref: "#/definitions/ServiceMetricValue"
       responses:
-        '200':
-          description: '成功'
+        "200":
+          description: "成功"
           schema:
-            $ref: '#/definitions/ApiResponse'
-  '/alerts':
+            $ref: "#/definitions/ApiResponse"
+  "/alerts":
     get:
       tags:
         - alert
@@ -127,10 +127,10 @@ paths:
           in: query
           type: string
       responses:
-        '200':
+        "200":
           description: 並び順は、アラートの発生時刻が新しい順です。 一覧は最大100件まで取得されます。nextId はアラートが101件以上あるときに取得されます。
           schema:
-            $ref: '#/definitions/AlertsResponse'
+            $ref: "#/definitions/AlertsResponse"
 definitions:
   HostsResponse:
     type: object
@@ -140,14 +140,14 @@ definitions:
       hosts:
         type: array
         items:
-          $ref: '#/definitions/Host'
+          $ref: "#/definitions/Host"
   HostResponse:
     type: object
     required:
       - host
     properties:
       host:
-        $ref: '#/definitions/Host'
+        $ref: "#/definitions/Host"
   HostStatusRequest:
     type: object
     required:
@@ -167,7 +167,7 @@ definitions:
       alerts:
         type: array
         items:
-          $ref: '#/definitions/Alert'
+          $ref: "#/definitions/Alert"
       nextId:
         type: string
   HostMetricValue:
@@ -231,57 +231,57 @@ definitions:
   Host:
     type: object
     required:
-        - createdAt
-        - id
-        - name
-        - meta
-        - interfaces
-        - type
-        - status
-        - memo
-        - isRetired
-        - retiredAt
-        - roles
+      - createdAt
+      - id
+      - name
+      - meta
+      - interfaces
+      - type
+      - status
+      - memo
+      - isRetired
+      - retiredAt
+      - roles
     properties:
-        createdAt:
-            type: number
-            description:  ホストの登録時刻（epoch秒）
-        id:
-            type: string
-            description:  ホストID
-        name:
-            type: string
-            description:  ホスト名
-        displayName:
-            type: string
-            description:  optional ホストの管理名
-        customIdentifier:
-            type: string
-            description:  optional ホストに対するユーザー独自の識別子
-        meta:
-            type: object
-            description:  ホストのメタ情報
-        interfaces:
-            type: array
-            items:
-              type: object
-            description:  ホストのネットワークインターフェース情報
-        type:
-            type: string
-            description:  ホストの種別（"agent", "container-agent", "cloud" など）
-        status:
-            type: string
-            description:  ホストのステータス（"working", "standby" など）
-        memo:
-            type: string
-            description:  ホストに関するメモ。メモは管理画面から編集できます。
-        isRetired:
-            type: boolean
-            description:  ホストが退役しているかどうか
-        retiredAt:
-            type: number
-            description:  optional ホストの退役時刻（epoch秒）
-        roles:
-            type: object
-            # hash[array[string]]
-            description:  ホストが所属しているロールの一覧。キーはサービス名、値はそのサービスにおけるロール名の配列です。
+      createdAt:
+        type: number
+        description: ホストの登録時刻（epoch秒）
+      id:
+        type: string
+        description: ホストID
+      name:
+        type: string
+        description: ホスト名
+      displayName:
+        type: string
+        description: optional ホストの管理名
+      customIdentifier:
+        type: string
+        description: optional ホストに対するユーザー独自の識別子
+      meta:
+        type: object
+        description: ホストのメタ情報
+      interfaces:
+        type: array
+        items:
+          type: object
+        description: ホストのネットワークインターフェース情報
+      type:
+        type: string
+        description: ホストの種別（"agent", "container-agent", "cloud" など）
+      status:
+        type: string
+        description: ホストのステータス（"working", "standby" など）
+      memo:
+        type: string
+        description: ホストに関するメモ。メモは管理画面から編集できます。
+      isRetired:
+        type: boolean
+        description: ホストが退役しているかどうか
+      retiredAt:
+        type: number
+        description: optional ホストの退役時刻（epoch秒）
+      roles:
+        type: object
+        # hash[array[string]]
+        description: ホストが所属しているロールの一覧。キーはサービス名、値はそのサービスにおけるロール名の配列です。
