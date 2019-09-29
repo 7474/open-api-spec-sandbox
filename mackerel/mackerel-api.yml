@@ -89,7 +89,7 @@ paths:
           name: hostStatus
           required: true
           schema:
-            $ref: "#/definitions/HostStatusRequest"
+            $ref: "#/definitions/ApiResponse"
       responses:
         "200":
           description: "成功"

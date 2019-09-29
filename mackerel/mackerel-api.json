@@ -40,6 +40,9 @@
         "name": "alert"
       },
       {
+        "name": "host"
+      },
+      {
         "name": "hostMetric"
       },
       {
@@ -47,6 +50,110 @@
       }
     ],
     "paths": {
+      "/hosts": {
+        "get": {
+          "tags": [
+            "host"
+          ],
+          "operationId": "getHosts",
+          "parameters": [
+            {
+              "name": "service",
+              "in": "query",
+              "type": "string",
+              "description": "optional サービス名。"
+            },
+            {
+              "name": "role",
+              "in": "query",
+              "type": "string",
+              "description": "サービス内のロール名。複数指定可能（結果は各ロールに所属するホスト群の和集合となります）。serviceが指定されていない場合は無効です。"
+            },
+            {
+              "name": "name",
+              "in": "query",
+              "type": "string",
+              "description": "optional ホスト名。"
+            },
+            {
+              "name": "status",
+              "in": "query",
+              "type": "string",
+              "description": "optional ホストのステータスを絞り込む。複数指定可能。デフォルトは working と standbyです。"
+            },
+            {
+              "name": "customIdentifier",
+              "in": "query",
+              "type": "string",
+              "description": "optional ホスト情報の登録やホスト情報の更新で登録したユーザー独自の識別子。"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "成功",
+              "schema": {
+                "$ref": "#/definitions/HostsResponse"
+              }
+            }
+          }
+        }
+      },
+      "/hosts/{hostId}": {
+        "get": {
+          "tags": [
+            "host"
+          ],
+          "operationId": "getHost",
+          "parameters": [
+            {
+              "name": "hostId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "成功",
+              "schema": {
+                "$ref": "#/definitions/HostResponse"
+              }
+            }
+          }
+        }
+      },
+      "/hosts/{hostId}/status": {
+        "post": {
+          "tags": [
+            "host"
+          ],
+          "operationId": "postHostStatus",
+          "parameters": [
+            {
+              "name": "hostId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "hostStatus",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/HostStatusRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "成功",
+              "schema": {
+                "$ref": "#/definitions/HostResponse"
+              }
+            }
+          }
+        }
+      },
       "/tsdb": {
         "post": {
           "tags": [
@@ -141,6 +248,48 @@
       }
     },
     "definitions": {
+      "HostsResponse": {
+        "type": "object",
+        "required": [
+          "hosts"
+        ],
+        "properties": {
+          "hosts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Host"
+            }
+          }
+        }
+      },
+      "HostResponse": {
+        "type": "object",
+        "required": [
+          "host"
+        ],
+        "properties": {
+          "host": {
+            "$ref": "#/definitions/Host"
+          }
+        }
+      },
+      "HostStatusRequest": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "standby",
+              "working",
+              "maintenance",
+              "poweroff"
+            ]
+          }
+        }
+      },
       "ApiResponse": {
         "type": "object",
         "properties": {
@@ -244,6 +393,79 @@
           },
           "closedAt": {
             "type": "integer"
+          }
+        }
+      },
+      "Host": {
+        "type": "object",
+        "required": [
+          "createdAt",
+          "id",
+          "name",
+          "meta",
+          "interfaces",
+          "type",
+          "status",
+          "memo",
+          "isRetired",
+          "retiredAt",
+          "roles"
+        ],
+        "properties": {
+          "createdAt": {
+            "type": "number",
+            "description": "ホストの登録時刻（epoch秒）"
+          },
+          "id": {
+            "type": "string",
+            "description": "ホストID"
+          },
+          "name": {
+            "type": "string",
+            "description": "ホスト名"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "optional ホストの管理名"
+          },
+          "customIdentifier": {
+            "type": "string",
+            "description": "optional ホストに対するユーザー独自の識別子"
+          },
+          "meta": {
+            "type": "object",
+            "description": "ホストのメタ情報"
+          },
+          "interfaces": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "ホストのネットワークインターフェース情報"
+          },
+          "type": {
+            "type": "string",
+            "description": "ホストの種別（\"agent\", \"container-agent\", \"cloud\" など）"
+          },
+          "status": {
+            "type": "string",
+            "description": "ホストのステータス（\"working\", \"standby\" など）"
+          },
+          "memo": {
+            "type": "string",
+            "description": "ホストに関するメモ。メモは管理画面から編集できます。"
+          },
+          "isRetired": {
+            "type": "boolean",
+            "description": "ホストが退役しているかどうか"
+          },
+          "retiredAt": {
+            "type": "number",
+            "description": "optional ホストの退役時刻（epoch秒）"
+          },
+          "roles": {
+            "type": "object",
+            "description": "ホストが所属しているロールの一覧。キーはサービス名、値はそのサービスにおけるロール名の配列です。"
           }
         }
       }
