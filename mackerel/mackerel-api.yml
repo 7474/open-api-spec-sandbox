@@ -34,6 +34,27 @@ paths:
       tags:
         - host
       operationId: getHosts
+      parameters:
+        - name: service
+          in: query
+          type: string
+          description: optional サービス名。
+        - name: role
+          in: query
+          type: string
+          description: サービス内のロール名。複数指定可能（結果は各ロールに所属するホスト群の和集合となります）。serviceが指定されていない場合は無効です。
+        - name: name
+          in: query
+          type: string
+          description: optional ホスト名。
+        - name: status
+          in: query
+          type: string
+          description: optional ホストのステータスを絞り込む。複数指定可能。デフォルトは working と standbyです。
+        - name: customIdentifier
+          in: query
+          type: string
+          description: optional ホスト情報の登録やホスト情報の更新で登録したユーザー独自の識別子。
       responses:
         "200":
           description: "成功"
