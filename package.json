@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "This repository is my sandbox of [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification).",
   "main": "index.js",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^1.0.8-4.2.2",
     "node-red-nodegen": "^0.0.2"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
