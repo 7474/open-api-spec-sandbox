@@ -147,9 +147,12 @@ paths:
         - name: nextId
           in: query
           type: string
+        - name: limit
+          in: query
+          type: number
       responses:
         "200":
-          description: 並び順は、アラートの発生時刻が新しい順です。 一覧は最大100件まで取得されます。nextId はアラートが101件以上あるときに取得されます。
+          description: 並び順は、アラートの発生時刻が新しい順です。 一覧は最大100件まで取得されます。nextId はアラートがlimit件より多くあるときに取得されます。
           schema:
             $ref: "#/definitions/AlertsResponse"
 definitions:
