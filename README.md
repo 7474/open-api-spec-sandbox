@@ -12,9 +12,10 @@ Currently refer to Swagger.
 
 ```sh
 # C# Client
-java -jar ./swagger-codegen-cli-2.3.1.jar generate \
+npm install
+npm run openapi-generator -- generate \
    -i ./mackerel/mackerel-api.yml \
-   -l csharp-dotnet2 \
+   -g csharp-dotnet2 \
    -o ./mackerel/client \
    --api-package Koudenpa.Mackerel.Api
 ```
@@ -22,8 +23,8 @@ java -jar ./swagger-codegen-cli-2.3.1.jar generate \
 ```sh
 # Node-RED Node
 npm install
-./node_modules/.bin/node-red-nodegen ./mackerel/mackerel-api.json \
+npm run node-red-nodegen -- ./mackerel/mackerel-api.json \
     -o ./mackerel/node/ \
     --name mackerel-api-client \
-    --keywords "nodered,mackerel" \
+    --keywords "nodered,mackerel"
 ```

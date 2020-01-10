@@ -9,7 +9,9 @@
     "node-red-nodegen": "^0.0.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "node-red-nodegen": "node-red-nodegen",
+    "openapi-generator": "openapi-generator"
   },
   "repository": {
     "type": "git",
