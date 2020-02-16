@@ -24,10 +24,11 @@ securityDefinitions:
 security:
   - apiKey: []
 tags:
-  - name: alert
   - name: host
   - name: hostMetric
   - name: serviceMetric
+  - name: alert
+  - name: graphAnnotation
 paths:
   "/hosts":
     get:
@@ -155,6 +156,22 @@ paths:
           description: 並び順は、アラートの発生時刻が新しい順です。 一覧は最大100件まで取得されます。nextId はアラートがlimit件より多くあるときに取得されます。
           schema:
             $ref: "#/definitions/AlertsResponse"
+  "/graph-annotations":
+    post:
+      tags:
+        - graphAnnotation
+      operationId: postGraphAnnotation
+      parameters:
+        - name: graphAnnotation
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/GraphAnnotationBody"
+      responses:
+        "200":
+          description: 入力にidが付与されて返却されます。
+          schema:
+            $ref: "#/definitions/GraphAnnotation"
 definitions:
   HostsResponse:
     type: object
@@ -309,3 +326,42 @@ definitions:
         type: object
         # hash[array[string]]
         description: ホストが所属しているロールの一覧。キーはサービス名、値はそのサービスにおけるロール名の配列です。
+  GraphAnnotationBody:
+    type: object
+    required:
+      - title
+      - from
+      - to
+      - service
+    properties:
+      title:
+        type: string
+        description: アノテーションのタイトル
+      description:
+        type: string
+        description: アノテーションの詳細
+      from:
+        type: number
+        description: 開始時刻 (epoch秒)
+      to:
+        type: number
+        description: 終了時刻 (epoch秒)
+      service:
+        type: string
+        description: サービス名
+      roles:
+        type: array
+        items:
+          type: string
+        description: ロール名の配列。このフィールドを指定しない場合は、サービスに紐づくアノテーションとなる
+  GraphAnnotation:
+    allOf:
+      - $ref: "#/definitions/Id"
+      - $ref: "#/definitions/GraphAnnotationBody"
+  Id:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
