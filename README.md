@@ -6,7 +6,7 @@ Currently refer to Swagger.
 
 ## Mackerel API
 
-- [mackerel-api.json](./mackerel/mackerel-api.json)
+- https://github.com/7474/mackerel-openapi-spec
 
 ### Snipet
 
